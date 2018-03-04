@@ -1,9 +1,18 @@
 import asyncio
+import logging
 import traceback
 import httptools
 import httptools.parser.errors
 import asab
 
+from .request import Request
+from .cidict import CIDict
+
+#
+
+L = logging.getLogger(__name__)
+
+#
 
 class HTTPServerProtocol(asyncio.Protocol):
 
@@ -13,6 +22,7 @@ class HTTPServerProtocol(asyncio.Protocol):
 		self.transport = None
 		self.parser = None
 
+		self.request_class = Request
 		self.request = None
 
 		self.url = None
@@ -88,7 +98,20 @@ class HTTPServerProtocol(asyncio.Protocol):
 
 
 	def on_headers_complete(self):
-		print("on_headers_complete", self.headers)
+		try:
+			self.request = self.request_class(
+				url_bytes=self.url,
+				headers=CIDict(self.headers),
+				version=self.parser.get_http_version(),
+				method=self.parser.get_method().decode(),
+				transport=self.transport
+			)
+		except:
+			#TODO: Handle this ...
+			L.exception("on_headers_complete")
+
+		print("BB", self.request)
+
 
 	def on_body(self, body: bytes):
 		print("on_body", body)
