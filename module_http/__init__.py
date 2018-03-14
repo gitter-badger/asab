@@ -1,7 +1,7 @@
 import logging
 import asab
 
-from .protocol import HTTPServerProtocol
+from .service import ServiceHTTPServer
 
 #
 
@@ -22,11 +22,9 @@ asab.Config.add_defaults(
 
 class Module(asab.Module):
 
+
 	def __init__(self, app):
 		super().__init__(app)
 
-		self.servers = []
-
-		coro = app.Loop.create_server(HTTPServerProtocol, app.Config.get('http', 'host'), app.Config.getint('http', 'port'))
-		server = app.Loop.run_until_complete(coro)
-		self.servers.append(server)
+		self._service_http_server = ServiceHTTPServer(app)
+		app.register_service("service_http_server", self._service_http_server)

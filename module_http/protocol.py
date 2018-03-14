@@ -5,7 +5,7 @@ import httptools
 import httptools.parser.errors
 import asab
 
-from .request import Request
+#from .request import Request
 from .cidict import CIDict
 
 #
@@ -34,7 +34,7 @@ class HTTPServerProtocol(asyncio.Protocol):
 
 	def connection_made(self, transport):
 		peername = transport.get_extra_info('peername')
-		print('Connection from {} -> {}'.format(peername, self))
+		L.debug('Connection from {} -> {}'.format(peername, self))
 		self.transport = transport
 
 
