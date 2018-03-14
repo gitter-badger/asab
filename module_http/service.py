@@ -17,5 +17,5 @@ class ServiceHTTPServer(asab.StreamSocketServerService):
 		host = asab.Config.get('http', 'host')
 		port = asab.Config.getint('http', 'port')
 
-		L.debug("Starting http server on {} {} ...".format(host, port))
+		L.debug("Starting HTTP server on {} {} ...".format(host, port))
 		await self.create_server(app, HTTPServerProtocol, [(host, port)])

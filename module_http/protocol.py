@@ -5,7 +5,7 @@ import httptools
 import httptools.parser.errors
 import asab
 
-#from .request import Request
+from .request import Request
 from .cidict import CIDict
 
 #
@@ -28,13 +28,12 @@ class HTTPServerProtocol(asyncio.Protocol):
 		self.url = None
 		self.headers = None
 
-
 		self._header_fragment = b''
 
 
 	def connection_made(self, transport):
 		peername = transport.get_extra_info('peername')
-		L.debug('Connection from {} -> {}'.format(peername, self))
+		L.debug('HTTP Connection from {}'.format(peername))
 		self.transport = transport
 
 
@@ -109,8 +108,6 @@ class HTTPServerProtocol(asyncio.Protocol):
 		except:
 			#TODO: Handle this ...
 			L.exception("on_headers_complete")
-
-		print("BB", self.request)
 
 
 	def on_body(self, body: bytes):
